@@ -1,45 +1,38 @@
 var cards = [
-    {
-        rank: "Queen",
-        suit: "Hearts",
-        cardImage: "images/queen-of-hearts.png",
-    },
-    {
-        rank: "Queen",
-        suit: "Diamonds",
-        cardImage: "images/queen-of-diamonds.png",
-    },
-    {
-        rank: "King",
-        suit: "Hearts",
-        cardImage: "images/king-of-hearts.png",
-    },
-    {
-        rank: "King",
-        suit: "Diamonds",
-        cardImage: "images/king-of-diamonds.png",
-    }
-];
+{cardImage:"queen", front: "images/queen-of-diamonds.png" }, 
+{cardImage:"king", front: "images/king-of-hearts.png"},
+{cardImage:"queen", front: "images/queen-of-hearts.png" }, 
+{cardImage:"king", front: "images/king-of-diamonds.png"}
+]
 
 var cardsInPlay = [];
 
-var checkForMatch = function() {
-    if (cardsInPlay[0] === cardsInPlay[1]) {
-        alert("You found a match");
-    } else {
-        alert("Sorry, try again.");
-    }
-};
+var createBoard = function() {
+	var board = document.getElementById("game-board");
+	for (var i = 0; i < cards.length; i++) {
+		var cardElement = document.createElement("img"); 
+		cardElement.setAttribute("src", "images/back.png");
+		cardElement.setAttribute("data-id", i);
+		cardElement.addEventListener("click", flipCard);
+		board.appendChild(cardElement);
+	}
+}
 
-var flipCard = function(cardId) {
-    cardsInPlay.push(cards[cardId].rank);
-    if (cardsInPlay.length === 2) {
-        checkForMatch();
-    }
-    console.log("User flipped " + cards[cardId].rank);
-    console.log(cards[cardId].cardImage);
-    console.log(cards[cardId].suit);
-};
+var flipCard = function() {
+	var cardId = this.getAttribute("data-id")
+	console.log("User flipped " + cards[cardId].cardImage);
+	cardsInPlay.push(cards[cardId].cardImage);
+	this.setAttribute("src", cards[cardId].front);
+	checkForMatch(cardsInPlay);
+}
 
-flipCard(0);
-flipCard(1);
+
+var checkForMatch = function(cardsInPlay) {
+ if (cardsInPlay.length === 2 && cardsInPlay[0] === cardsInPlay[1]) {
+ 	alert("You found a match!");
+} else if (cardsInPlay.length === 2 && cardsInPlay[0] !== cardsInPlay[1]) {
+	alert("Sorry, try again.");
+ }
+}
+
+createBoard();
